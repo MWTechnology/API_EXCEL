@@ -44,7 +44,7 @@
 <script type="text/javascript">
     function addRout(A,B){
         alert(A+'-'+B);
-        for(let i=Number(A);  i<Number(B)+1; i++) {
+        for(let i=Number(A);  i<Number(A)+Number(B)+1; i++) {
 
 
 
@@ -117,12 +117,14 @@
 
     // Добавление маршрута на карту.
     myMap.geoObjects.add(multiRoute);
-});}}
+});}
+    alert('Конец');
+    }
 </script>
 <script type="text/javascript">
     function addRoutMetroHome(A,B){
         alert(A+'-'+B);
-        for(let i=Number(A);  i<Number(B)+1; i++) {
+        for(let i=Number(A);  i<Number(A)+Number(B)+1; i++) {
         ymaps.ready(
             function () {
 
@@ -203,12 +205,12 @@
 
     // Добавление маршрута на карту.
     myMap.geoObjects.add(multiRoute);
-});});}}
+});});}alert('Конец');}
 </script>
 <script type="text/javascript">
     function addRoutMetroOther(A,B){
         alert(A+'-'+B);
-        for(let i=Number(A);  i<Number(B)+1; i++) {
+        for(let i=Number(A);  i<Number(A)+Number(B)+1; i++) {
         ymaps.ready(
             function () {
                 var myMap = new ymaps.Map("map", {
@@ -282,12 +284,12 @@
 
     // Добавление маршрута на карту.
     myMap.geoObjects.add(multiRoute);
-});});}}
+});});}alert('Конец');}
 </script>
 <script type="text/javascript">
     function addRoutCenter(A,B){
         alert(A+'-'+B);
-        for(let i=Number(A);  i<Number(B)+1; i++) {
+        for(let i=Number(A);  i<Number(A)+Number(B)+1; i++) {
 
 
 
@@ -356,7 +358,7 @@
 
     // Добавление маршрута на карту.
     myMap.geoObjects.add(multiRoute);
-});}}
+});}alert('Конец');}
 </script>
 
 </body>
