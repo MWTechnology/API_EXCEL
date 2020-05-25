@@ -19,6 +19,11 @@ PyCharm( ссылка на скачивание https://drive.google.com/open?id
 
 4)pip install -r requirement_excel.txt (Устанавливаем необходимые библиотеки)
 
+pip install xlrd
+pip install xlwt
+pip install yandex_geocoder
+
+
 5) вводим по порядку команды 
 
 python manage.py makemigrations
@@ -50,7 +55,24 @@ python manage.py runserver
 
 3) Загружаем файл в дирректорию API_EXCEL-master/django-import-export-master/tests/Perevod_new
 
-4)
+4) Теперь запускаем файл main.py и ждём 
+
+В итоге получается файл geokoders.xls
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Возвращаемся к нашему импорту файла 
+
+8) Выбираем наш полученный файл geokoders.xls
+
+9) указываем формат .xls
+
+10) И Импортируем
+
+11) Переходим по ссылке http://127.0.0.1:8000/table/
+
+12)И на жимая на кнопочки (ждём после каждого нажатия пока всё не выполниться)
+
+13)
 
 
 
