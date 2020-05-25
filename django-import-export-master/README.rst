@@ -8,9 +8,37 @@ PyCharm( ссылка на скачивание https://drive.google.com/open?id
 
 И сам репозиторий 
 
-После установки 
-    cd tests    
-    ./manage.py makemigrations
-    ./manage.py migrate
-    ./manage.py createsuperuser
-    ./manage.py runserver
+После установки python и PyCharm 
+
+1) Создаём проект 
+
+2) Клонируем в наш проект папку с Github
+
+3)Переходим к необходимой папке cd API_EXCEL-master/django-import-export-master/tests
+
+4)pip install -r requirement_excel.txt (Устанавливаем необходимые библиотеки)
+
+5) вводим по порядку команды 
+
+python manage.py makemigrations
+
+python manage.py migrate
+
+python manage.py createsuperuser
+
+admin
+
+пропуск (или любой email)  Это не важно
+пароль 
+ещё раз пароль 
+
+python manage.py runserver
+
+6) переходим по ссылке http://127.0.0.1:8000/admin/
+
+7) далее books -> импортировать (обратите внимание какая должна быть таблица Excel (там указаны названия столбцов)
+
+8)
+
+
+
