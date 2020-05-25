@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+<script type="text/javascript" src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=2ef6f488-c05f-465e-b89b-9c1b17066afc" type="text/javascript"></script>
+<div class="ml-4 mr-4">
+    <div class="mt-2 mb-2 text-center" ><a  >Всего строк в таблице: </a>{% for rout in routings_list %}<a>{% if rout.id == 1 %}{{rout.summa}}{% endif %}</a>{% endfor %}</div>
+
+<div class="mt-2 mb-2 text-center">
+<a href="#" class="btn btn-primary " {% for rout in routings_list %} onclick="addRout('{{rout.id}}', '{{rout.summa}}')" {% endfor %}>Общее растояние</a>
+<a href="#" class="btn btn-primary" {% for rout in routings_list %} onclick="addRoutMetroHome('{{rout.id}}', '{{rout.summa}}')" {% endfor %}>Метро Дом</a>
+<a href="#" class="btn btn-primary" {% for rout in routings_list %} onclick="addRoutMetroOther('{{rout.id}}', '{{rout.summa}}')" {% endfor %}>Метро Другое</a>
+<a href="#" class="btn btn-primary" {% for rout in routings_list %} onclick="addRoutCenter('{{rout.id}}', '{{rout.summa}}')" {% endfor %}>До центра</a>
+</div>
+    <div id="map" style="width:450px;height:300px; display:none;"  ></div>
+
+<table  class="table table-sm table-dark table-striped" border="1" width="100%" cellpadding="5">
+<tr class="bg-success"><th >id</th><th>id_people</th> <th>latitude_home</th><th>longitude_home</th> <th>latitude_other</th><th>longitude_other</th><th>distance</th><th>time</th><th>home_metro</th><th>time_home_metro</th><th>other_metro</th><th>other_metro</th><th>home_center</th></tr> <!--ряд с ячейками заголовков-->
+{% for rout in routings_list %}
+    <tr id="tr-{{rout.id}}">
+        <td class="bg-info" id="name-{{rout.id}}">{{rout.id}}</td>
+        <td id="names-{{rout.id}}">{{rout.id_people}}</td>
+        <td id="point_a2-{{rout.id}}">{{rout.latitude_home}}</td>
+        <td id="point_a1-{{rout.id}}">{{rout.longitude_home}}</td>
+        <td id="point_b2-{{rout.id}}">{{rout.latitude_other}}</td>
+        <td id="point_b1-{{rout.id}}">{{rout.longitude_other}}</td>
+        <td id="distance-{{rout.id}}">{{rout.time_m}}</td>
+        <td id="time-{{rout.id}}">{{rout.time_m}}</td>
+        <td id="metro-{{rout.id}}">{{rout.time_m}}</td>
+        <td id="time-metro_home-{{rout.id}}">{{rout.time_m}}</td>
+        <td id="metro_other-{{rout.id}}">{{rout.time_m}}</td>
+        <td id="time-metro_other-{{rout.id}}">{{rout.time_m}}</td>
+        <td id="time_center-{{rout.id}}">{{rout.time_m}}</td>
+
+    </tr>
+    {% endfor %}
+</table>
+</div>
+<script type="text/javascript" src="https://api-maps.yandex.ru/1.1/?key=API-ключ&modules=regions~metro" charset="utf-8"></script>
+<script type="text/javascript">
+    function addRout(A,B){
+        alert(A+'-'+B);
+        for(let i=Number(A);  i<Number(B)+1; i++) {
+
+
+
+        ymaps.ready(
+
+
+
+
+            function () {
+
+
+
+
+                var myMap = new ymaps.Map("map", {
+        center: [55.753994, 37.622093],
+        zoom: 9,
+        controls: []
+
+    });
+
+
+
+
+    // Построение маршрута.
+
+    var Point_a_sh = parseFloat(document.getElementById('point_a2-'+i).textContent);
+
+    var Point_a_dg = parseFloat(document.getElementById('point_a1-'+i).textContent);
+    var Point_b_sh = parseFloat(document.getElementById('point_b2-'+i).textContent);
+    var Point_b_dg = parseFloat(document.getElementById('point_b1-'+i).textContent);
+
+
+    var multiRoute = new ymaps.multiRouter.MultiRoute({
+        referencePoints: [
+            [Point_a_sh , Point_a_dg],
+            [Point_b_sh , Point_b_dg]
+        ]
+    });
+
+
+
+
+
+    // Добавление маршрута на карту.
+
+
+    myMap.geoObjects.add(multiRoute);
+
+    // Подписка на событие готовности маршрута.
+
+                        multiRoute.model.events.add('requestsuccess', function() {
+                            // Получение ссылки на активный маршрут.
+
+                            var activeRoute = multiRoute.getActiveRoute();
+                            // Получение коллекции путей активного маршрута.
+                            var activeRoutePaths = activeRoute.getPaths();
+                            console.log('The index of this number is: ' + i);
+
+                            // Проход по коллекции путей.
+                            // let a = i;
+                            activeRoutePaths.each(function(path) {
+                                //console.log("Длина пути: " + path.properties.get("distance").text);
+                                //console.log("Время прохождения пути: " + path.properties.get("duration").text);
+                                document.getElementById('distance-'+i).innerText = path.properties.get("distance").text;
+                                document.getElementById('time-'+i).innerText = path.properties.get("duration").text ;
+
+                            });
+                        });
+
+
+    // Добавление маршрута на карту.
+    myMap.geoObjects.add(multiRoute);
+});}}
+</script>
+<script type="text/javascript">
+    function addRoutMetroHome(A,B){
+        alert(A+'-'+B);
+        for(let i=Number(A);  i<Number(B)+1; i++) {
+        ymaps.ready(
+            function () {
+
+                            // Создаем модель мультимаршрута.
+
+
+
+                var myMap = new ymaps.Map("map", {
+        center: [55.753994, 37.622093],
+        zoom: 9,
+        controls: []
+    });
+                // Построение маршрута.
+    var Point_a_sh = parseFloat(document.getElementById('point_a2-'+i).textContent);
+    var Point_a_dg = parseFloat(document.getElementById('point_a1-'+i).textContent);
+    // Поиск станций метро.
+    ymaps.geocode([Point_a_sh , Point_a_dg], {
+        // Ищем только станции метро.
+        kind: 'metro',
+        // Запрашиваем не более 20 результатов.
+        results: 1
+    }).then(function (res) {
+
+            var firstGeoObject = res.geoObjects.get(0),
+            // Координаты геообъекта.
+            coords = firstGeoObject.geometry.getCoordinates();
+            var coords0 = coords[0];
+            var coords1 = coords[1];
+            console.log('Название объекта: %s', firstGeoObject.properties.get('name'));
+            console.log('Адрес объекта: %s', firstGeoObject.getAddressLine());
+            document.getElementById('metro-'+i).innerText = firstGeoObject.properties.get('name');
+
+
+
+    var multiRoute = new ymaps.multiRouter.MultiRoute({
+        referencePoints: [
+            [Point_a_sh , Point_a_dg],
+            [coords0 , coords1]
+        ],
+            params: {
+                //Тип маршрутизации - пешеходная маршрутизация.
+                routingMode: 'pedestrian'
+            }
+
+    });
+
+
+    // Добавление маршрута на карту.
+
+
+    myMap.geoObjects.add(multiRoute);
+
+    // Подписка на событие готовности маршрута.
+
+                        multiRoute.model.events.add('requestsuccess', function() {
+                            // Получение ссылки на активный маршрут.
+
+                            var activeRoute = multiRoute.getActiveRoute();
+                            //console.log("Путь" + activeRoute);
+                            // Получение коллекции путей активного маршрута.
+                            var activeRoutePaths = activeRoute.getPaths();
+
+
+
+
+
+                            // Проход по коллекции путей.
+                            // let a = i;
+                            activeRoutePaths.each(function(path) {
+                                console.log("Длина пути: " + path.properties.get("distance").text);
+                                console.log("Время прохождения пути: " + path.properties.get("duration").text);
+
+                                document.getElementById('time-metro_home-'+i).innerText = path.properties.get("duration").text ;
+
+                            });
+                        });
+
+
+    // Добавление маршрута на карту.
+    myMap.geoObjects.add(multiRoute);
+});});}}
+</script>
+<script type="text/javascript">
+    function addRoutMetroOther(A,B){
+        alert(A+'-'+B);
+        for(let i=Number(A);  i<Number(B)+1; i++) {
+        ymaps.ready(
+            function () {
+                var myMap = new ymaps.Map("map", {
+        center: [55.753994, 37.622093],
+        zoom: 9,
+        controls: []
+    });
+                // Построение маршрута.
+    var Point_b_sh = parseFloat(document.getElementById('point_b2-'+i).textContent);
+    var Point_b_dg = parseFloat(document.getElementById('point_b1-'+i).textContent);
+    // Поиск станций метро.
+    ymaps.geocode([Point_b_sh , Point_b_dg], {
+        // Ищем только станции метро.
+        kind: 'metro',
+        // Запрашиваем не более 20 результатов.
+        results: 1
+    }).then(function (res) {
+
+            var firstGeoObject = res.geoObjects.get(0),
+            // Координаты геообъекта.
+            coords = firstGeoObject.geometry.getCoordinates();
+            var coords0 = coords[0];
+            var coords1 = coords[1];
+            console.log('Название объекта: %s', firstGeoObject.properties.get('name'));
+            //console.log('Адрес объекта: %s', firstGeoObject.getAddressLine());
+            document.getElementById('metro_other-'+i).innerText = firstGeoObject.properties.get('name');
+
+
+
+    var multiRoute = new ymaps.multiRouter.MultiRoute({
+        referencePoints: [
+            [Point_b_sh , Point_b_dg],
+            [coords0 , coords1]
+        ],
+            params: {
+                //Тип маршрутизации - пешеходная маршрутизация.
+                routingMode: 'pedestrian'
+            }
+    });
+
+
+    // Добавление маршрута на карту.
+
+
+    myMap.geoObjects.add(multiRoute);
+
+    // Подписка на событие готовности маршрута.
+
+                        multiRoute.model.events.add('requestsuccess', function() {
+                            // Получение ссылки на активный маршрут.
+
+                            var activeRoute = multiRoute.getActiveRoute();
+                            // Получение коллекции путей активного маршрута.
+                            var activeRoutePaths = activeRoute.getPaths();
+
+
+
+
+
+                            // Проход по коллекции путей.
+                            // let a = i;
+                            activeRoutePaths.each(function(path) {
+                                console.log("Длина пути: " + path.properties.get("distance").text);
+                                console.log("Время прохождения пути: " + path.properties.get("duration").text);
+
+                                document.getElementById('time-metro_other-'+i).innerText = path.properties.get("duration").text ;
+
+                            });
+                        });
+
+
+    // Добавление маршрута на карту.
+    myMap.geoObjects.add(multiRoute);
+});});}}
+</script>
+<script type="text/javascript">
+    function addRoutCenter(A,B){
+        alert(A+'-'+B);
+        for(let i=Number(A);  i<Number(B)+1; i++) {
+
+
+
+        ymaps.ready(
+
+
+
+
+            function () {
+
+                var myMap = new ymaps.Map("map", {
+        center: [55.753994, 37.622093],
+        zoom: 9,
+        controls: []
+
+    });
+
+
+
+
+    // Построение маршрута.
+
+    var Point_a_sh = parseFloat(document.getElementById('point_a2-'+i).textContent);
+
+    var Point_a_dg = parseFloat(document.getElementById('point_a1-'+i).textContent);
+
+
+
+    var multiRoute = new ymaps.multiRouter.MultiRoute({
+        referencePoints: [
+            [Point_a_sh , Point_a_dg],
+            [55.755058875094946,37.62226466137695]
+        ]
+    });
+
+
+
+
+
+    // Добавление маршрута на карту.
+
+
+    myMap.geoObjects.add(multiRoute);
+
+    // Подписка на событие готовности маршрута.
+
+                        multiRoute.model.events.add('requestsuccess', function() {
+                            // Получение ссылки на активный маршрут.
+
+                            var activeRoute = multiRoute.getActiveRoute();
+                            // Получение коллекции путей активного маршрута.
+                            var activeRoutePaths = activeRoute.getPaths();
+                            console.log('The index of this number is: ' + i);
+
+                            // Проход по коллекции путей.
+                            // let a = i;
+                            activeRoutePaths.each(function(path) {
+                                //console.log("Длина пути: " + path.properties.get("distance").text);
+                                //console.log("Время прохождения пути: " + path.properties.get("duration").text);
+                                //document.getElementById('distance-'+i).innerText = path.properties.get("distance").text;
+                                document.getElementById('time_center-'+i).innerText = path.properties.get("duration").text ;
+
+                            });
+                        });
+
+
+    // Добавление маршрута на карту.
+    myMap.geoObjects.add(multiRoute);
+});}}
+</script>
+
+</body>
+</html>
